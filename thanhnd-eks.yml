@@ -1,0 +1,14 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+metadata:
+  name: thanhnd
+  region: us-east-1
+iam:
+  withOIDC: true
+  serviceRoleARN: arn:aws:iam::092465499044:role/EKSClusterRole
+managedNodeGroups:
+  - name: ng-1
+    instanceType: t3.small
+    desiredCapacity: 1
+    iam:
+      instanceRoleARN: arn:aws:iam::092465499044:instance-profile/EKSWorkerNodeProfile
