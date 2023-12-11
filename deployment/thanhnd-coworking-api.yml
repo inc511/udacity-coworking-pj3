@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
       - name: thanhnd-coworking-api
-        image: 761503551478.dkr.ecr.us-east-1.amazonaws.com/project-3:latest
+        image: 085331010772.dkr.ecr.us-east-1.amazonaws.com/udacity-coworking-pj3:latest
         imagePullPolicy: Always
         livenessProbe:
           httpGet:
