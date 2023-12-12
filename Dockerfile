@@ -13,3 +13,4 @@ COPY ./analytics .
 
 # Start the database and Flask application
 CMD service postgresql start && python app.py
+
