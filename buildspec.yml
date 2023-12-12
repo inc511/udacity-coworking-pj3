@@ -3,17 +3,16 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      - echo Trying to Logging in ECR...
+      - echo Logging into ECR
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
   build:
     commands:
-      - echo Starting build the project at `date`
-      - echo Start building the Docker image...          
+      - echo Starting build at `date`
+      - echo Docker image build in progress.....
       - docker build -t $IMAGE_REPO_NAME:$CODEBUILD_BUILD_NUMBER .
-      - docker tag $IMAGE_REPO_NAME:$CODEBUILD_BUILD_NUMBER $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$CODEBUILD_BUILD_NUMBER
+      - docker tag $IMAGE_REPO_NAME:$CODEBUILD_BUILD_NUMBER $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$CODEBUILD_BUILD_NUMBER      
   post_build:
     commands:
-      - echo Build success at `date`
-      - echo Now Pushing the Docker image to ECR repository...
+      - echo Completed build at `date`
+      - echo Start pushing image to ECR....
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$CODEBUILD_BUILD_NUMBER
-

@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-data:
-  DB_USERNAME: "postgres"
-  DB_NAME: "my-postgres-postgresql"
-  DB_HOST: "my-postgres-postgresql.default.svc.cluster.local"
-  DB_PORT: "5432"
-metadata:
-  name: thanhnd-db-env

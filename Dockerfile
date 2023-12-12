@@ -1,23 +1,15 @@
-# Use the Python 3.10 slim-buster base image
-FROM python:3.10
+FROM python:3.10-slim-buster
 
-# Switch to the root user
 USER root
 
-# Set the working directory inside the container
-WORKDIR /app
+WORKDIR /src
 
-# Copy the requirements.txt file to the container
-COPY ./analytics/. /app
+COPY ./analytics/requirements.txt requirements.txt
 
-# Install Python dependencies from requirements.txt
+# Dependencies are installed during build time in the container itself so we don't have OS mismatch
 RUN pip install -r requirements.txt
 
-# Make port 5153 available to the world outside this container
-EXPOSE 5153
-
-# Copy the entire analytics directory to the container
 COPY ./analytics .
 
-# Run app.py when the container launches
-CMD ["python", "app.py"]
+# Start the database and Flask application
+CMD service postgresql start && python app.py
