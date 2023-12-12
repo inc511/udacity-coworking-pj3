@@ -20,4 +20,4 @@ EXPOSE 5153
 COPY ./analytics .
 
 # Run app.py when the container launches
-CMD ["python", "app.py"]
+CMD ["sh", "-c", "DB_USERNAME=postgres DB_PASSWORD=42qtvLkHH0 python app.py"]
