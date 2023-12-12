@@ -1,5 +1,5 @@
 # Use the Python 3.10 slim-buster base image
-FROM python:3.8
+FROM python:3.10
 
 # Switch to the root user
 USER root
