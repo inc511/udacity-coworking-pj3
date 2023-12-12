@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
       - name: thanhnd-coworking-api
-        image: 085331010772.dkr.ecr.us-east-1.amazonaws.com/udacity-coworking-pj3:latest
+        image: 085331010772.dkr.ecr.us-east-1.amazonaws.com/udacity-coworking-pj3:30
         imagePullPolicy: Always
         livenessProbe:
           httpGet:
@@ -67,6 +67,6 @@ spec:
         - name: DB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: thanhd-db-secret
+              name: thanhnd-db-secret
               key: DB_PASSWORD
       restartPolicy: Always
