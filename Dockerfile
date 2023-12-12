@@ -1,16 +1,17 @@
-FROM python:3.10-slim-buster
+# Use an official Python runtime as a parent image
+FROM python:3.12.0-slim
 
-USER root
+# Set the working directory to /app
+WORKDIR /app
 
-WORKDIR /src
+# Copy the current directory contents into the container at /app
+COPY ./analytics/. /app
 
-COPY ./analytics/requirements.txt requirements.txt
-
-# Dependencies are installed during build time in the container itself so we don't have OS mismatch
+# Install any needed packages specified in requirements.txt
 RUN pip install -r requirements.txt
 
-COPY ./analytics .
+# Make port 5153 available to the world outside this container
+EXPOSE 5153
 
-# Start the database and Flask application
-CMD service postgresql start && python app.py
-
+# Run app.py when the container launches
+CMD ["python", "app.py"]
