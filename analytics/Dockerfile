@@ -5,11 +5,11 @@ FROM python:3.8.0
 WORKDIR /app
 
 # Copy the current directory contents into the container at /app
-COPY ./analytics/. /app
+COPY . /app
 
 # Install any needed packages specified in requirements.txt
 RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+RUN pip install --trusted-host pypi.python.org -r requirements.txt
 
 # Make port 5153 available to the world outside this container
 EXPOSE 5153
