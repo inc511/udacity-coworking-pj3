@@ -47,22 +47,22 @@ spec:
         - name: DB_USERNAME
           valueFrom:
             configMapKeyRef:
-              name: db-env
+              name: thanhnd-db-env
               key: DB_USERNAME
         - name: DB_NAME
           valueFrom:
             configMapKeyRef:
-              name: db-env
+              name: thanhnd-db-env
               key: DB_NAME
         - name: DB_HOST
           valueFrom:
             configMapKeyRef:
-              name: db-env
+              name: thanhnd-db-env
               key: DB_HOST
         - name: DB_PORT
           valueFrom:
             configMapKeyRef:
-              name: db-env
+              name: thanhnd-db-env
               key: DB_PORT
         - name: DB_PASSWORD
           valueFrom:
