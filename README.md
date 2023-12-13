@@ -8,66 +8,30 @@ For this project, you are a DevOps engineer who will be collaborating with a tea
 
 ### Dependencies
 #### Local Environment
-1. Python Environment - run Python 3.6+ applications and install Python dependencies via `pip`
-2. Docker CLI - build and run Docker images locally
-3. `kubectl` - run commands against a Kubernetes cluster
-4. `helm` - apply Helm Charts to a Kubernetes cluster
+1. `Python Environment`: Ensure compatibility with `Python 3.8+` to run applications and install Python dependencies using pip.
+2. `Docker CLI`: Utilize the Docker command-line interface for building and running Docker images locally.
+3. `kubectl`: Use the Kubernetes command-line tool for executing commands against a Kubernetes cluster.
+4. `helm`: Apply Helm Charts to a Kubernetes cluster for efficient management and deployment.
 
 #### Setup AWS services
-1. `EKS` and its `node group` double check all the policies
-2. `ECR` to store the docker image after build the project
-3. Setup `Codebuild` and link it with your `github` account, remember to config the webhook event to trigger your build based on action.
+1. Amazon EKS and Node Groups:
+   Verify the policies associated with EKS and its node groups to ensure proper configuration
+2. Amazon ECR:
+   Configure Amazon Elastic Container Registry (ECR) to store Docker images after project builds.
+3. AWS CodeBuild Setup:
+   Set up AWS CodeBuild and integrate it with your GitHub account. Configure webhook events to trigger builds based on GitHub actions.
 
 #### Setup workspace
-1. Configure aws account
-    `aws configure`
-    Remember you can insert the session token with
-    `aws configure set aws_session_token <YOUR_AWS_SESSION_TOKEN>`
+1. Configure aws account, make sure you have correct role and permission
 2. Install `postgres` with `helm` chart
-   ```bash
-    helm repo add bitnami https://charts.bitnami.com/bitnami
-    helm repo update
-    helm install coworking-space bitnami/postgresql --set primary.  persistence.enabled=false
-   ```
-    Export your password and replace the db-secret with it after encode base64
-    ```bash
-    export POSTGRES_PASSWORD=$(kubectl get secret --namespace default coworking-space-postgresql -o jsonpath="{.data.postgres-password}" | base64 -d)
-    ```
-    Connect with your DB
-    ```bash
-    kubectl port-forward --namespace default svc/coworking-space-postgresql 5432:5432 & PGPASSWORD="$POSTGRES_PASSWORD" psql --host 127.0.0.1 -U postgres -d postgres -p 5432
-    ```
-    Install `psql`
-    ```bash
-    pip install --upgrade pip
-    sudo apt update
-    sudo apt install postgresql-client
-    sudo apt-get install build-essential libpq-dev
-    ```
-    Init the db with
-    ```bash
-    kubectl port-forward --namespace default svc/coworking-space-postgresql 5432:5432 & PGPASSWORD="$POSTGRES_PASSWORD" psql --host 127.0.0.1 -U postgres -d postgres -p 5432 < db/1_create_tables.sql
-    psql --host 127.0.0.1 -U postgres -d postgres -p 5432 < db/2_seed_users.sql
-    psql --host 127.0.0.1 -U postgres -d postgres -p 5432 < db/3_seed_tokens.sql
-    ```
-3. Double check the deployment config and run
-   ```bash
-   kubectl apply -f ./deployment/
-   ```
-4. Run your app local
-   ```bash
-   cd analytics
-   pip install -r requirements.txt
-    pip install --upgrade wheel
-    DB_USERNAME=postgres DB_PASSWORD=KbRnvMoeX6 python app.py
-   ```
-5. Setup `CloudWatch`, remember to attach CloudWatch policy to EKS role. After that, run
+3. Double check the deployment config and apply it for deployment, using port forward to run SQL; remember to init the DB with dummy data
+4. Setup `CloudWatch`, remember to attach CloudWatch policy to EKS role and setup CloudWatch for it
    ```bash
    ClusterName=thanhnd2
-RegionName=us-east-1
-FluentBitHttpPort='2020'
-FluentBitReadFromHead='Off'
-[[ ${FluentBitReadFromHead} = 'On' ]] && FluentBitReadFromTail='Off'|| FluentBitReadFromTail='On'
-[[ -z ${FluentBitHttpPort} ]] && FluentBitHttpServer='Off' || FluentBitHttpServer='On'
-curl https://raw.githubusercontent.com/aws-samples/amazon-cloudwatch-container-insights/latest/k8s-deployment-manifest-templates/deployment-mode/daemonset/container-insights-monitoring/quickstart/cwagent-fluent-bit-quickstart.yaml | sed 's/{{cluster_name}}/'${ClusterName}'/;s/{{region_name}}/'${RegionName}'/;s/{{http_server_toggle}}/"'${FluentBitHttpServer}'"/;s/{{http_server_port}}/"'${FluentBitHttpPort}'"/;s/{{read_from_head}}/"'${FluentBitReadFromHead}'"/;s/{{read_from_tail}}/"'${FluentBitReadFromTail}'"/' | kubectl apply -f -
+    RegionName=us-east-1
+    FluentBitHttpPort='2020'
+    FluentBitReadFromHead='Off'
+    [[ ${FluentBitReadFromHead} = 'On' ]] && FluentBitReadFromTail='Off'|| FluentBitReadFromTail='On'
+    [[ -z ${FluentBitHttpPort} ]] && FluentBitHttpServer='Off' || FluentBitHttpServer='On'
+    curl https://raw.githubusercontent.com/aws-samples/amazon-cloudwatch-container-insights/latest/k8s-deployment-manifest-templates/   deployment-mode/daemonset/container-insights-monitoring/quickstart/cwagent-fluent-bit-quickstart.yaml | sed 's/{{cluster_name}}/'$ {ClusterName}'/;s/{{region_name}}/'${RegionName}'/;s/{{http_server_toggle}}/"'${FluentBitHttpServer}'"/;s/{{http_server_port}}/"'$   {FluentBitHttpPort}'"/;s/{{read_from_head}}/"'${FluentBitReadFromHead}'"/;s/{{read_from_tail}}/"'${FluentBitReadFromTail}'"/' | kubectl    apply -f -
    ```
