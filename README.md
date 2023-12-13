@@ -27,11 +27,14 @@ For this project, you are a DevOps engineer who will be collaborating with a tea
 3. Double check the deployment config and apply it for deployment, using port forward to run SQL; remember to init the DB with dummy data
 4. Setup `CloudWatch`, remember to attach CloudWatch policy to EKS role and setup CloudWatch for it
    ```bash
-   ClusterName=thanhnd2
-    RegionName=us-east-1
-    FluentBitHttpPort='2020'
-    FluentBitReadFromHead='Off'
-    [[ ${FluentBitReadFromHead} = 'On' ]] && FluentBitReadFromTail='Off'|| FluentBitReadFromTail='On'
-    [[ -z ${FluentBitHttpPort} ]] && FluentBitHttpServer='Off' || FluentBitHttpServer='On'
-    curl https://raw.githubusercontent.com/aws-samples/amazon-cloudwatch-container-insights/latest/k8s-deployment-manifest-templates/   deployment-mode/daemonset/container-insights-monitoring/quickstart/cwagent-fluent-bit-quickstart.yaml | sed 's/{{cluster_name}}/'$ {ClusterName}'/;s/{{region_name}}/'${RegionName}'/;s/{{http_server_toggle}}/"'${FluentBitHttpServer}'"/;s/{{http_server_port}}/"'$   {FluentBitHttpPort}'"/;s/{{read_from_head}}/"'${FluentBitReadFromHead}'"/;s/{{read_from_tail}}/"'${FluentBitReadFromTail}'"/' | kubectl    apply -f -
+      ClusterName=thanhnd2
+      RegionName=us-east-1
+      FluentBitHttpPort='2020'
+      FluentBitReadFromHead='Off'
+      [[ ${FluentBitReadFromHead} = 'On' ]] && FluentBitReadFromTail='Off'|| FluentBitReadFromTail='On'
+      [[ -z ${FluentBitHttpPort} ]] && FluentBitHttpServer='Off' || FluentBitHttpServer='On'
+      curl https://raw.githubusercontent.com/aws-samples/amazon-cloudwatch-container-insights/latest/ k8s-deployment-manifest-templates/     deployment-mode/daemonset/container-insights-monitoring/quickstart/   cwagent-fluent-bit-quickstart.yaml | sed 's/{{cluster_name}}/'$    {ClusterName}'/;s/{{region_name}}/'${RegionName}'/;s/   {{http_server_toggle}}/"'${FluentBitHttpServer}'"/;s/{{http_server_port}}/"'$ {FluentBitHttpPort}'"/;s/{{read_from_head}}/"'$ {FluentBitReadFromHead}'"/;s/{{read_from_tail}}/"'${FluentBitReadFromTail}'"/' | kubectl      apply -f -
    ```
+6. How to deploy?
+   Push your updated code to `github` -> github will trigger webhook event to CodeBuile. It will run the build and push the Docker image to ECR. You can change the deployment image based on the new image by change the `thanhnd-coworking-api.yml`
+
